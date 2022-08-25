@@ -1,0 +1,9 @@
+steps:
+...
+# deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=deployment.yaml
+  - --location=asia-south1-a
+  - --cluster=nitish-sb
