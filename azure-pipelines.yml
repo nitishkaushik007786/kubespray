@@ -1,0 +1,64 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+trigger:
+- dev
+pool:
+  vmImage: ubuntu-latest
+variables:
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+stages:
+- stage: Tests
+  displayName: 'Test stage'
+  jobs:
+  - job: TestJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: echo Hello, Test stage starts   
+    displayName: 'SonarCloud Code Quality and Code Security'
+- stage: Build
+  displayName: 'Build stage'
+  dependsOn: Tests
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: echo Hello, Build stage starts   
+    displayName: 'Build artifacts'
+- stage: Deploy
+  displayName: 'AEM Cloud Deploy'
+  dependsOn: Build
+  jobs:
+  - job: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'Dev/Test Workloads AzureResourceManagement ServiceConnection'
+        KeyVaultName: 'adobeaem-kv-dev'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+    - script: echo Current Branch Name $(Build.SourceBranchName)
+      displayName: 'Run a one-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project. $(System.DefaultWorkingDirectory)
+        echo See https://aka.ms/yaml
+        git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+        git config --global user.email "visgera@publicisgroupe.net"
+        git config --global user.name "vishal.gera"
+        echo Hello, world 33 $(Build.SourceBranchName)
+        git clone https://$(AzureUserName):$(AzurePassword)@dibc.visualstudio.com/DIB/_git/AdobeEcommerce.AEM -b $(Build.SourceBranchName) aem
+        cd aem
+        echo 1
+        echo directories
+        ls
+        echo 2
+        git remote add adobe https://$(AdobeUserName):$(AdobePassword)@git.cloudmanager.adobe.com/doitbest/DOITBESTCOMMERCECOMPANYLLCSites-p87455-uk85361/
+        echo 3
+        git push adobe $(Build.SourceBranchName):refs/heads/$(Build.SourceBranchName)
+        echo Sync Azure repo with Adobe Cloud Repo and triger deploy
