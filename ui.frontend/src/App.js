@@ -7,7 +7,8 @@ class App extends Page {
   render() {
     return (
       <div>
-        <StoreInfo/>
+          <StoreInfo isMember={false}/> <br/>
+          <StoreInfo isMember={true}/>
         {this.childComponents}
         {this.childPages}
       </div>
