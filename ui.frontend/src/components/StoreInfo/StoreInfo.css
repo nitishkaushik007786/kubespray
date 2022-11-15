@@ -1,0 +1,33 @@
+@import url('https://fonts.cdnfonts.com/css/museo-sans-rounded?styles=44874,44871,44873,44875,44876,44872');
+
+.store-info-selector{
+    font-family: 'Museo Sans Rounded', sans-serif;
+}
+
+.store-info-selector_info{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.store-info-selector_info_tagline{
+    margin-right: 4px;
+}
+
+.store-info-selector_info_closing-time{
+    margin-left: 4px;
+}
+
+.store-info-selector_selector{
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.store-info-selector_selector_store-name{
+    margin-right: 6px;
+}
+
+.store-info-selector_selector svg{
+    color: #303133;
+}
